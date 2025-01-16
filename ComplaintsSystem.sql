@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Jan 16, 2025 at 10:03 PM
+-- Generation Time: Jan 16, 2025 at 10:34 PM
 -- Server version: 8.0.40-0ubuntu0.24.04.1
 -- PHP Version: 8.3.6
 
@@ -85,21 +85,23 @@ INSERT INTO `Complaint` (`complaintId`, `userId`, `title`, `description`, `statu
 CREATE TABLE `User` (
   `userId` int NOT NULL,
   `username` varchar(50) NOT NULL,
-  `password` varchar(100) NOT NULL
+  `password` varchar(100) NOT NULL,
+  `email` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `User`
 --
 
-INSERT INTO `User` (`userId`, `username`, `password`) VALUES
-(1, 'user1', 'password123'),
-(2, 'user2', 'password456'),
-(3, 'test', '$2y$10$8G1SSfEiwVPiZHFWJxRyye4hhj3fX.nk/k6.w/U/L1Cwlf8QkdHAW'),
-(4, 'user', '$2y$10$i6nlwPsL72QefC1zgjFrkOuNu7J9W/Kcz37YzYDD1UJLEEt7EG94q'),
-(5, 'sa', '$2y$10$aiO9UKMg.NPFzh5c1XzXYOnsjG9OMGAi5W/ibKRUldUGZlwiN6v9u'),
-(6, 'med', '$2y$10$x5yVFkT8lRbmtkQxMkHwR.STHeOe3yE5TXyOvwemTlPm5iBMGQH4K'),
-(7, 'medmed', '$2y$10$EFdXI1zbCxX/H4IUZHoAtOinecgkSf0WY0uzM/7m1wEqxQQxkY/K6');
+INSERT INTO `User` (`userId`, `username`, `password`, `email`) VALUES
+(1, 'user1', 'password123', 'user1@example.com'),
+(2, 'user2', 'password456', 'user2@example.com'),
+(3, 'test', '$2y$10$8G1SSfEiwVPiZHFWJxRyye4hhj3fX.nk/k6.w/U/L1Cwlf8QkdHAW', 'user3@example.com'),
+(4, 'user', '$2y$10$i6nlwPsL72QefC1zgjFrkOuNu7J9W/Kcz37YzYDD1UJLEEt7EG94q', 'user4@example.com'),
+(5, 'sa', '$2y$10$aiO9UKMg.NPFzh5c1XzXYOnsjG9OMGAi5W/ibKRUldUGZlwiN6v9u', 'user5@example.com'),
+(6, 'med', '$2y$10$x5yVFkT8lRbmtkQxMkHwR.STHeOe3yE5TXyOvwemTlPm5iBMGQH4K', 'user6@example.com'),
+(7, 'medmed', '$2y$10$EFdXI1zbCxX/H4IUZHoAtOinecgkSf0WY0uzM/7m1wEqxQQxkY/K6', 'user7@example.com'),
+(8, 'testgmail', '$2y$10$njW/BaWKeVVhd.BsNxq4kOlgOq.t4AlIR8haHJX1idGoYs12iQu9y', 'test@gmail.com');
 
 --
 -- Indexes for dumped tables
@@ -122,7 +124,8 @@ ALTER TABLE `Complaint`
 -- Indexes for table `User`
 --
 ALTER TABLE `User`
-  ADD PRIMARY KEY (`userId`);
+  ADD PRIMARY KEY (`userId`),
+  ADD UNIQUE KEY `email` (`email`);
 
 --
 -- AUTO_INCREMENT for dumped tables
@@ -144,7 +147,7 @@ ALTER TABLE `Complaint`
 -- AUTO_INCREMENT for table `User`
 --
 ALTER TABLE `User`
-  MODIFY `userId` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `userId` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- Constraints for dumped tables
