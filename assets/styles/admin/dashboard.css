@@ -1,0 +1,99 @@
+body {
+    font-family: 'Roboto', Arial, sans-serif;
+    background: linear-gradient(135deg, #6a11cb, #2575fc);
+    margin: 0;
+    padding: 0;
+    color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    animation: fadeIn 1s ease-in-out;
+}
+
+/* Fade-in animation */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+/* Dashboard container */
+.dashboard-container {
+    background: #fff;
+    color: #333;
+    width: 90%;
+    max-width: 600px;
+    margin: 30px auto;
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+    text-align: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.dashboard-container:hover {
+    transform: scale(1.02);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+}
+
+h1 {
+    margin-bottom: 20px;
+    font-size: 26px;
+    color: #333;
+}
+
+/* Navigation list */
+ul {
+    list-style: none;
+    padding: 0;
+    margin: 20px 0;
+}
+
+ul li {
+    margin: 15px 0;
+}
+
+ul li a {
+    text-decoration: none;
+    font-size: 16px;
+    color: #6a11cb;
+    padding: 12px 25px;
+    border: 2px solid #6a11cb;
+    border-radius: 8px;
+    display: inline-block;
+    font-weight: bold;
+    transition: all 0.3s ease-in-out;
+}
+
+ul li a:hover {
+    background: #6a11cb;
+    color: #fff;
+    transform: translateY(-2px);
+}
+
+/* Logout button */
+.logout {
+    color: #f44336;
+    border-color: #f44336;
+}
+
+.logout:hover {
+    background: #f44336;
+    color: #fff;
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+    h1 {
+        font-size: 22px;
+    }
+
+    ul li a {
+        font-size: 14px;
+        padding: 10px 20px;
+    }
+}
