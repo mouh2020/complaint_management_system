@@ -78,7 +78,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <label for="username">Username</label>
             <input type="text" id="username" name="username" placeholder="Enter your username" required>
 
-            <label for="email">Username</label>
+            <label for="email">Email</label>
             <input type="text" id="email" name="email" placeholder="Enter your email" required>
 
             <label for="password">Password</label>
