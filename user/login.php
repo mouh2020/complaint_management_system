@@ -6,7 +6,7 @@ $error_message = '';
 
 // Check if the user is already logged in
 if (isset($_SESSION['user_logged_in']) && $_SESSION['user_logged_in'] === true) {
-    header('Location: /user/dashboard.php');
+    header('Location: ./dashboard.php');
     exit;
 }
 
@@ -36,7 +36,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $_SESSION['user_username'] = $user['username'];
 
                 // Redirect to the user dashboard
-                header('Location: /user/dashboard.php');
+                header('Location: ./dashboard.php');
                 exit;
             } else {
                 $error_message = 'Invalid username or password.';
@@ -58,33 +58,36 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../assets/styles/user/login.css">
     <title>User Login</title>
 </head>
+
 <body>
     <div class="login-card">
         <h1>User Login</h1>
-        
+
         <?php if (!empty($error_message)): ?>
-            <div class="error-message"><?= htmlspecialchars($error_message) ?></div>
+        <div class="error-message"><?= htmlspecialchars($error_message) ?></div>
         <?php endif; ?>
-        
+
         <form method="POST">
             <label for="username">Username</label>
             <input type="text" id="username" name="username" placeholder="Enter your username" required>
-            
+
             <label for="password">Password</label>
             <input type="password" id="password" name="password" placeholder="Enter your password" required>
-            
+
             <button type="submit">Login</button>
         </form>
-        
+
         <div class="signup-link">
             Don't have an account? <a href="signup.php">Sign up here</a>.
         </div>
     </div>
 </body>
+
 </html>

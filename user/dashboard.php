@@ -4,14 +4,18 @@ include('../config/database.php'); // Include database connection
 
 // Check if the user is logged in
 if (!isset($_SESSION['user_logged_in']) || $_SESSION['user_logged_in'] !== true) {
-    header('Location: /user/login.php'); // Redirect to login page if not logged in
+    //!important if you are using linux uncomment the code below
+    /* header('Location: /user/login.php'); */
+        //! and comment the code below this 
+
+    header('Location: ./login.php'); // Redirect to login page if not logged in
     exit;
 }
 
 // Handle logout
 if (isset($_GET['action']) && $_GET['action'] === 'logout') {
     session_destroy(); // Destroy the session
-    header('Location: /'); // Redirect to home page
+    header('Location: ../index.php'); // Redirect to home page
     exit;
 }
 
@@ -21,12 +25,14 @@ $username = $_SESSION['user_username'] ?? 'User'; // Fallback to 'User' if usern
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../assets/styles/user/dashboard.css">
     <title>User Dashboard</title>
 </head>
+
 <body>
     <div class="dashboard-container">
         <h1>Welcome <?= htmlspecialchars($username ?? 'Guest') ?> to your Dashboard</h1>
@@ -38,5 +44,5 @@ $username = $_SESSION['user_username'] ?? 'User'; // Fallback to 'User' if usern
         </ul>
     </div>
 </body>
-</html>
 
+</html>

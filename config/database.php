@@ -2,8 +2,8 @@
 // Database configuration
 $host = "localhost";
 $username = "root";
-$password = "";
-$dbname = "";
+$password = "0550";
+$dbname = "ComplaintsSystem";
 
 // Create a connection using MySQLi
 $conn = new mysqli($host, $username, $password, $dbname);

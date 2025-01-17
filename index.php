@@ -7,10 +7,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $role = $_POST['role'];
 
         if ($role === 'admin') {
-            header('Location: /admin/login.php');
+            header('Location: ./admin/login.php');
             exit;
         } elseif ($role === 'client') {
-            header('Location: /user/login.php');
+            header('Location: ./user/login.php');
             exit;
         }
     }
@@ -19,12 +19,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="assets/styles/home.css">
     <title>Role Selection</title>
 </head>
+
 <body>
     <div class="role-selection-card">
         <h1>Complaints System</h1>
@@ -35,4 +37,5 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </form>
     </div>
 </body>
+
 </html>

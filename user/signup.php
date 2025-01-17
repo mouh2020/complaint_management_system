@@ -4,7 +4,11 @@ session_start();
 
 $error_message = '';
 if (isset($_SESSION['user_logged_in']) && $_SESSION['user_logged_in'] === true) {
-    header('Location: /user/dashboard.php');
+                    //!important if you are using linux uncomment the code below
+
+    /* header('Location: /user/dashboard.php'); */
+    //! and comment the code below this 
+    header('Location: ./dashboard.php');
     exit;
 }
 
@@ -41,7 +45,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 // Redirect to dashboard.php upon successful signup
                 $_SESSION['user_logged_in'] = true;
                 $_SESSION['user_username'] = $username;
-                header("Location: /user/dashboard.php");
+                //!important if you are using linux uncomment the code below
+                /* header("Location: /user/dashboard.php"); */
+                //! and comment the code below here
+                header("Location: ./dashboard.php");
+
                 exit();
             } else {
                 $error_message = 'Error occurred during registration. Please try again.';
@@ -60,18 +68,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../assets/styles/user/signup.css">
     <title>Sign Up</title>
 </head>
+
 <body>
     <div class="signup-card">
         <h1>Sign Up</h1>
 
         <?php if (!empty($error_message)): ?>
-            <div class="error-message"><?= htmlspecialchars($error_message) ?></div>
+        <div class="error-message"><?= htmlspecialchars($error_message) ?></div>
         <?php endif; ?>
 
         <form method="post" action="signup.php">
@@ -92,4 +102,5 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </div>
     </div>
 </body>
+
 </html>

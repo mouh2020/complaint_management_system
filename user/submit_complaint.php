@@ -4,7 +4,7 @@ include('../config/database.php'); // Include the database connection
 
 // Check if the user is logged in
 if (!isset($_SESSION['user_logged_in']) || $_SESSION['user_logged_in'] !== true) {
-    header('Location: /user/login.php'); // Redirect to login page if not logged in
+    header('Location: ./user/login.php'); // Redirect to login page if not logged in
     exit;
 }
 
@@ -35,6 +35,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -43,14 +44,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <title>Submit Complaint</title>
     <style></style>
 </head>
+
 <body>
     <h1>Submit a Complaint</h1>
 
     <!-- Display feedback message -->
     <?php if (!empty($message)): ?>
-        <div class="alert <?= strpos(htmlspecialchars($message), 'successfully') !== false ? '' : 'error' ?>">
-            <?= htmlspecialchars($message) ?>
-        </div>
+    <div class="alert <?= strpos(htmlspecialchars($message), 'successfully') !== false ? '' : 'error' ?>">
+        <?= htmlspecialchars($message) ?>
+    </div>
     <?php endif; ?>
 
     <!-- Complaint Submission Form -->
@@ -59,12 +61,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <input type="text" id="title" name="title" placeholder="Enter the title" required aria-label="Complaint Title">
 
         <label for="description">Description:</label>
-        <textarea id="description" name="description" placeholder="Enter the description" required aria-label="Complaint Description"></textarea>
+        <textarea id="description" name="description" placeholder="Enter the description" required
+            aria-label="Complaint Description"></textarea>
 
         <button type="submit" aria-label="Submit Complaint">Submit Complaint</button>
     </form>
 
     <p><a href="dashboard.php" aria-label="Back to Dashboard">Back to Dashboard</a></p>
 </body>
-</html>
 
+</html>
