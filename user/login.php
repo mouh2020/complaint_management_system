@@ -27,8 +27,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($result->num_rows > 0) {
             $user = $result->fetch_assoc();
 
-            // Verify the entered password against the hashed password in the database
-            if (password_verify($password, $user['password'])) {
+            // Check password
+            if ($password == $user['password'] ){
                 $_SESSION['user_logged_in'] = true;
 
                 // Store user details in the session

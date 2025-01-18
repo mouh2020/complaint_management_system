@@ -30,12 +30,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $error_message = 'Email already exists. Please try a different email address.';
             }
         } else {
-            // Hash the password for security
-            $hashed_password = password_hash($password, PASSWORD_BCRYPT);
-
             // Insert the new user into the database
             $stmt = $conn->prepare("INSERT INTO User (username, email, password) VALUES (?, ?, ?)");
-            $stmt->bind_param('sss', $username, $email, $hashed_password);
+            $stmt->bind_param('sss', $username, $email, $password);
 
             if ($stmt->execute()) {
                 // Redirect to dashboard.php upon successful signup
