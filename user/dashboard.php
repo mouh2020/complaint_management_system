@@ -16,7 +16,7 @@ if (isset($_GET['action']) && $_GET['action'] === 'logout') {
 }
 
 // Get the username from the session
-$username = $_SESSION['user_username'] ?? 'User'; // Fallback to 'User' if username is not set
+$username = $_SESSION['user_username'] 
 ?>
 
 <!DOCTYPE html>
