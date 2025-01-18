@@ -1,15 +1,14 @@
 <?php
 session_start();
-include('../config/database.php'); // Include database connection file
+include('../config/database.php');
 
-// Check if the user is logged in
 if (!isset($_SESSION['user_logged_in']) || $_SESSION['user_logged_in'] !== true) {
-    header('Location: ./user/login.php'); // Redirect to login page if not logged in
+    header('Location: ./login.php');
     exit;
 }
 
-// Fetch complaints for the logged-in user
 $userId = $_SESSION['userId'];
+
 $query = "SELECT complaintId, title, description, status, dateSubmitted, imageData FROM Complaint WHERE userId = ?";
 $stmt = $conn->prepare($query);
 $stmt->bind_param('i', $userId);
@@ -25,60 +24,41 @@ $result = $stmt->get_result();
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../assets/styles/user/view_complaints.css">
     <title>My Complaints</title>
-    <style>
-    .table-container img {
-        max-width: 100px;
-        max-height: 100px;
-        object-fit: cover;
-    }
-    </style>
 </head>
 
 <body>
     <h1>My Complaints</h1>
-
-    <div class="table-container">
-        <?php if ($result->num_rows > 0): ?>
-        <table>
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Title</th>
-                    <th>Description</th>
-                    <th>Status</th>
-                    <th>Date Submitted</th>
-                    <th>Picture</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php while ($row = $result->fetch_assoc()): ?>
-                <tr>
-                    <td><?= htmlspecialchars($row['complaintId']) ?></td>
-                    <td><?= htmlspecialchars($row['title']) ?></td>
-                    <td><?= htmlspecialchars($row['description']) ?></td>
-                    <td>
-                        <span class="badge <?= strtolower($row['status']) ?>">
-                            <?= htmlspecialchars($row['status']) ?>
-                        </span>
-                    </td>
-                    <td><?= htmlspecialchars($row['dateSubmitted']) ?></td>
-                    <td>
-                        <?php if (!empty($row['imageData'])): ?>
-                        <img src="data:image/jpeg;base64,<?= base64_encode($row['imageData']) ?>" alt="Complaint Image">
-                        <?php else: ?>
-                        No Image
-                        <?php endif; ?>
-                    </td>
-                </tr>
-                <?php endwhile; ?>
-            </tbody>
-        </table>
-        <?php else: ?>
-        <p>You have not submitted any complaints yet.</p>
-        <?php endif; ?>
-    </div>
-
-    <p><a href="dashboard.php" aria-label="Back to Dashboard">Back to Dashboard</a></p>
+    <?php if ($result->num_rows > 0): ?>
+    <table>
+        <tr>
+            <th>ID</th>
+            <th>Title</th>
+            <th>Description</th>
+            <th>Status</th>
+            <th>Date Submitted</th>
+            <th>Picture</th>
+        </tr>
+        <?php while ($row = $result->fetch_assoc()): ?>
+        <tr>
+            <td><?= htmlspecialchars($row['complaintId']) ?></td>
+            <td><?= htmlspecialchars($row['title']) ?></td>
+            <td><?= htmlspecialchars($row['description']) ?></td>
+            <td><?= htmlspecialchars($row['status']) ?></td>
+            <td><?= htmlspecialchars($row['dateSubmitted']) ?></td>
+            <td class="tableimg">
+                <?php if (!empty($row['imageData'])): ?>
+                <img src="data:image/jpeg;base64,<?= base64_encode($row['imageData']) ?>" alt="Complaint Image">
+                <?php else: ?>
+                No Image
+                <?php endif; ?>
+            </td>
+        </tr>
+        <?php endwhile; ?>
+    </table>
+    <?php else: ?>
+    <p>You have not submitted any complaints yet.</p>
+    <?php endif; ?>
+    <p><a href="dashboard.php">Back to Dashboard</a></p>
 </body>
 
 </html>

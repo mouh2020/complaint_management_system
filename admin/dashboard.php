@@ -1,16 +1,15 @@
 <?php
 session_start();
-// Check if the user is logged in
+include('../config/database.php');
+
 if (!isset($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== true) {
-    // Redirect to login page if not logged in
-    header('Location: ./admin/login.php');
+    header('Location: ./login.php');
     exit;
 }
 
-// Logout handler
 if (isset($_GET['action']) && $_GET['action'] === 'logout') {
-    session_destroy(); // Destroy the session
-    header('Location: ../'); // Redirect to home page
+    session_destroy();
+    header('Location: ../index.php');
     exit;
 }
 ?>
@@ -28,7 +27,6 @@ if (isset($_GET['action']) && $_GET['action'] === 'logout') {
 <body>
     <div class="dashboard-container">
         <h1>Welcome to the Admin Dashboard</h1>
-
         <ul>
             <li><a href="view_all_complaints.php">View All Complaints</a></li>
             <li><a href="resolve_complaints.php">Resolve Complaints</a></li>
