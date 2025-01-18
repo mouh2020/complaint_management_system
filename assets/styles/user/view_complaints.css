@@ -1,8 +1,9 @@
+/* General body styles */
 body {
     font-family: 'Roboto', Arial, sans-serif;
     background: linear-gradient(135deg, #6a11cb, #2575fc);
     margin: 0;
-    padding: 0;
+    padding: 20px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -10,45 +11,39 @@ body {
     color: #fff;
 }
 
+/* Heading styles */
 h1 {
     margin: 20px 0;
     text-align: center;
     font-size: 28px;
+    font-weight: bold;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
 }
 
+/* Paragraph styles */
 p {
     text-align: center;
     font-size: 16px;
+    margin: 10px 0;
 }
 
-/* Table Styles */
+/* Table container */
 .table-container {
     width: 90%;
-    max-width: 800px;
-    overflow-x: auto; /* Enable scrolling for smaller screens */
+    max-width: 1200px;
+    overflow-x: auto;
     margin-top: 20px;
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+    padding: 20px;
 }
 
-.table-container tbody {
-    display: block;
-    max-height: 300px; /* Approx. 10 rows with 30px height each */
-    overflow-y: auto; /* Add vertical scrolling */
-}
-
-.table-container thead, .table-container tbody tr {
-    display: table;
-    width: 100%;
-    table-layout: fixed;
-}
-
+/* Table styles */
 table {
     width: 100%;
     border-collapse: collapse;
-    background: #fff;
     color: #333;
-    border-radius: 10px;
-    overflow: hidden;
-    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
 }
 
 th, td {
@@ -61,10 +56,19 @@ th {
     background: #6a11cb;
     color: #fff;
     font-weight: bold;
+    position: sticky;
+    top: 0;
+    z-index: 1;
+}
+
+/* Table row styles */
+tr {
+    background: #fff; /* Default row color */
+    transition: background 0.3s ease;
 }
 
 tr:hover {
-    background: #f4f4f4;
+    background: #f4f4f4; /* Hover color */
 }
 
 tr:last-child td {
@@ -74,17 +78,18 @@ tr:last-child td {
 /* Status Badges */
 .badge {
     display: inline-block;
-    padding: 5px 10px;
-    border-radius: 12px;
+    padding: 8px 12px;
+    border-radius: 20px;
     font-size: 12px;
     font-weight: bold;
     text-align: center;
     text-transform: uppercase;
     min-width: 80px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
 .badge.pending {
-    background-color: #f44336; /* Red for pending */
+    background-color: #ff9800; /* Orange for pending */
     color: #fff;
 }
 
@@ -93,7 +98,33 @@ tr:last-child td {
     color: #fff;
 }
 
-/* Button */
+/* Image styles */
+.tableimg {
+    text-align: center;
+}
+
+.tableimg img {
+    max-width: 200px; /* Increased image size */
+    height: auto;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    object-fit: cover; /* Ensure images maintain aspect ratio */
+}
+
+.tableimg img:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+    cursor: pointer;
+}
+
+/* No image placeholder */
+.tableimg .no-image {
+    font-style: italic;
+    color: #777;
+}
+
+/* Button styles */
 a {
     color: #6a11cb;
     text-decoration: none;
@@ -116,8 +147,28 @@ a:hover {
 
 /* Responsive Design */
 @media (max-width: 768px) {
+    h1 {
+        font-size: 24px;
+    }
+
+    .table-container {
+        width: 100%;
+        border-radius: 0;
+        padding: 10px;
+    }
+
     th, td {
+        padding: 10px;
         font-size: 14px;
+    }
+
+    .badge {
+        font-size: 10px;
+        min-width: 70px;
+    }
+
+    .tableimg img {
+        max-width: 150px; /* Slightly smaller on mobile */
     }
 
     a {
@@ -125,4 +176,3 @@ a:hover {
         padding: 10px 20px;
     }
 }
-    

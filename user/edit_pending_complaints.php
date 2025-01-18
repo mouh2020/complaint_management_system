@@ -15,7 +15,7 @@ $query = "SELECT complaintId, title, description, imageData FROM Complaint WHERE
 $stmt = $conn->prepare($query);
 $stmt->bind_param('i', $userId);
 $stmt->execute();
-$result = $stmt->get_result();
+$complaintsResult = $stmt->get_result();
 
 // Handle form submission
 if (isset($_POST['update_complaint'])) {
@@ -39,16 +39,25 @@ if (isset($_POST['update_complaint'])) {
         $stmt = $conn->prepare("SELECT imageData FROM Complaint WHERE complaintId = ?");
         $stmt->bind_param('i', $complaintId);
         $stmt->execute();
-        $result = $stmt->get_result();
-        if ($row = $result->fetch_assoc()) {
+        $imageResult = $stmt->get_result();
+        if ($row = $imageResult->fetch_assoc()) {
             $imageData = $row['imageData'];
         }
+        $imageResult->free();
     }
 
     // Update the complaint
-    $updateQuery = "UPDATE Complaint SET title = ?, description = ?, imageData = ? WHERE complaintId = ? AND userId = ?";
-    $updateStmt = $conn->prepare($updateQuery);
-    $updateStmt->bind_param('sssii', $title, $description, $imageData, $complaintId, $userId);
+    if ($imageData === null) {
+        // If no image is provided and no existing image, set imageData to NULL
+        $updateQuery = "UPDATE Complaint SET title = ?, description = ?, imageData = NULL WHERE complaintId = ? AND userId = ?";
+        $updateStmt = $conn->prepare($updateQuery);
+        $updateStmt->bind_param('ssii', $title, $description, $complaintId, $userId);
+    } else {
+        // If an image is provided or retained, update with the image data
+        $updateQuery = "UPDATE Complaint SET title = ?, description = ?, imageData = ? WHERE complaintId = ? AND userId = ?";
+        $updateStmt = $conn->prepare($updateQuery);
+        $updateStmt->bind_param('sssii', $title, $description, $imageData, $complaintId, $userId);
+    }
 
     if ($updateStmt->execute()) {
         header('Location: view_complaints.php');
@@ -72,9 +81,9 @@ if (isset($_POST['update_complaint'])) {
 <body>
     <h1>Edit Pending Complaints</h1>
 
-    <?php if ($result->num_rows > 0): ?>
+    <?php if ($complaintsResult->num_rows > 0): ?>
+    <?php while ($row = $complaintsResult->fetch_assoc()): ?>
     <form method="POST" enctype="multipart/form-data">
-        <?php while ($row = $result->fetch_assoc()): ?>
         <div>
             <h3>Complaint ID: <?= htmlspecialchars($row['complaintId']) ?></h3>
             <label>Title:</label>
@@ -94,9 +103,9 @@ if (isset($_POST['update_complaint'])) {
             <input type="hidden" name="complaintId" value="<?= htmlspecialchars($row['complaintId']) ?>">
             <button type="submit" name="update_complaint">Update Complaint</button>
         </div>
-        <hr>
-        <?php endwhile; ?>
     </form>
+    <hr>
+    <?php endwhile; ?>
     <?php else: ?>
     <p>You have no pending complaints to edit.</p>
     <?php endif; ?>

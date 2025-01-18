@@ -79,8 +79,9 @@ $sqlComplaint = "CREATE TABLE IF NOT EXISTS Complaint (
     title VARCHAR(100) NOT NULL,
     description TEXT NOT NULL,
     status VARCHAR(20) NOT NULL DEFAULT 'Pending',
-    dateSubmitted DATE NOT NULL,
-    resolvedDate DATE DEFAULT NULL,
+    dateSubmitted DATETIME NOT NULL, -- Changed from DATE to DATETIME
+    resolvedDate DATETIME DEFAULT NULL, -- Changed from DATE to DATETIME
+    imageData LONGBLOB DEFAULT NULL, -- Added this column
     FOREIGN KEY (userId) REFERENCES User(userId) ON DELETE CASCADE
 )";
 if (mysqli_query($link, $sqlComplaint)) {
@@ -89,19 +90,42 @@ if (mysqli_query($link, $sqlComplaint)) {
     die("Error creating Complaint table: " . mysqli_error($link));
 }
 
+// Check if 'imageData' column exists
+$checkColumn = mysqli_query($link, "SHOW COLUMNS FROM Complaint LIKE 'imageData'");
+if (mysqli_num_rows($checkColumn) == 0) {
+    $alterTable = "ALTER TABLE Complaint ADD COLUMN imageData LONGBLOB DEFAULT NULL";
+    if (mysqli_query($link, $alterTable)) {
+        echo "Column 'imageData' added successfully.<br>";
+    } else {
+        die("Error adding 'imageData' column: " . mysqli_error($link));
+    }
+}
+
 // Insert data into Complaint table if not exists
 $checkComplaint = "SELECT COUNT(*) AS count FROM Complaint";
 $resultComplaint = mysqli_query($link, $checkComplaint);
 $rowComplaint = mysqli_fetch_assoc($resultComplaint);
 if ($rowComplaint['count'] == 0) {
-    $insertComplaint = "INSERT INTO Complaint (userId, title, description, status, dateSubmitted, resolvedDate) VALUES
-        (1, 'Broken AC', 'The AC in the main hall is not working.', 'Resolved', '2025-01-01', '2025-01-16'),
-        (2, 'Noisy Neighbors', 'The neighbors are making too much noise at night.', 'Resolved', '2025-01-05', '2025-01-16'),
-        (1, 'Leaking Roof', 'The roof is leaking during rain.', 'Pending', '2025-01-10', NULL)";
-    if (mysqli_query($link, $insertComplaint)) {
-        echo "Complaint data inserted successfully.<br>";
+    // Fetch userId values from the User table
+    $userIds = [];
+    $result = mysqli_query($link, "SELECT userId FROM User");
+    while ($row = mysqli_fetch_assoc($result)) {
+        $userIds[] = $row['userId'];
+    }
+
+    // Ensure there are at least 2 users for the sample data
+    if (count($userIds) >= 2) {
+        $insertComplaint = "INSERT INTO Complaint (userId, title, description, status, dateSubmitted, resolvedDate) VALUES
+            ({$userIds[0]}, 'Broken AC', 'The AC in the main hall is not working.', 'Resolved', NOW(), NOW()),
+            ({$userIds[1]}, 'Noisy Neighbors', 'The neighbors are making too much noise at night.', 'Resolved', NOW(), NOW()),
+            ({$userIds[0]}, 'Leaking Roof', 'The roof is leaking during rain.', 'Pending', NOW(), NULL)";
+        if (mysqli_query($link, $insertComplaint)) {
+            echo "Complaint data inserted successfully.<br>";
+        } else {
+            die("Error inserting Complaint data: " . mysqli_error($link));
+        }
     } else {
-        die("Error inserting Complaint data: " . mysqli_error($link));
+        echo "Not enough users in the User table to insert sample complaints.<br>";
     }
 } else {
     echo "Complaint data already exists.<br>";

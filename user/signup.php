@@ -1,16 +1,8 @@
 <?php
-include('../config/database.php'); // Include the database connection
 session_start();
+include('../config/database.php');
 
 $error_message = '';
-if (isset($_SESSION['user_logged_in']) && $_SESSION['user_logged_in'] === true) {
-                    //!important if you are using linux uncomment the code below
-
-    /* header('Location: /user/dashboard.php'); */
-    //! and comment the code below this 
-    header('Location: ./dashboard.php');
-    exit;
-}
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Sanitize user input
@@ -42,14 +34,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $stmt->bind_param('sss', $username, $email, $hashed_password);
 
             if ($stmt->execute()) {
-                // Redirect to dashboard.php upon successful signup
-                $_SESSION['user_logged_in'] = true;
-                $_SESSION['user_username'] = $username;
-                //!important if you are using linux uncomment the code below
-                /* header("Location: /user/dashboard.php"); */
-                //! and comment the code below here
-                header("Location: ./dashboard.php");
-
+                // Redirect to login page after successful signup
+                header("Location: ./login.php");
                 exit();
             } else {
                 $error_message = 'Error occurred during registration. Please try again.';
@@ -64,7 +50,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 ?>
-
 
 <!DOCTYPE html>
 <html lang="en">

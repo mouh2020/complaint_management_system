@@ -1,3 +1,4 @@
+/* General body styles */
 body {
     font-family: 'Roboto', Arial, sans-serif;
     background: linear-gradient(135deg, #6a11cb, #2575fc);
@@ -22,6 +23,7 @@ body {
     }
 }
 
+/* Heading styles */
 h1 {
     margin: 20px 0;
     font-size: 26px;
@@ -130,6 +132,39 @@ a:hover {
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
 }
 
+/* File upload section styles */
+.upload-section {
+    margin: 20px 0;
+    text-align: center;
+}
+
+.upload-label {
+    display: inline-block;
+    padding: 12px 20px;
+    font-size: 14px;
+    font-weight: bold;
+    color: #fff;
+    background: linear-gradient(135deg, #6a11cb, #2575fc);
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.3s ease-in-out, transform 0.2s ease;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.upload-label:hover {
+    background: linear-gradient(135deg, #2575fc, #6a11cb);
+    transform: scale(1.05);
+}
+
+.upload-label:active {
+    transform: scale(0.95);
+}
+
+/* Hide the default file input */
+input[type="file"] {
+    display: none;
+}
+
 /* Responsive styles */
 @media (max-width: 768px) {
     form {
@@ -144,4 +179,3 @@ a:hover {
         font-size: 22px;
     }
 }
-    

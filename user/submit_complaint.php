@@ -15,20 +15,32 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $imageData = null;
 
     if (isset($_FILES['complainPic']) && $_FILES['complainPic']['error'] === UPLOAD_ERR_OK) {
-        $imageData = file_get_contents($_FILES['complainPic']['tmp_name']);
+        $imageInfo = getimagesize($_FILES['complainPic']['tmp_name']);
+        if ($imageInfo !== false) {
+            $imageData = file_get_contents($_FILES['complainPic']['tmp_name']);
+        } else {
+            $message = "Invalid image file.";
+        }
     }
 
     if (!empty($title) && !empty($description)) {
-        $stmt = $conn->prepare("INSERT INTO Complaint (userId, title, description, status, dateSubmitted, imageData) VALUES (?, ?, ?, 'Pending', NOW(), ?)");
-        $stmt->bind_param('isss', $_SESSION['userId'], $title, $description, $imageData);
+        // Ensure userId is set in the session
+        if (isset($_SESSION['userId'])) {
+            $userId = $_SESSION['userId'];
+            $stmt = $conn->prepare("INSERT INTO Complaint (userId, title, description, status, dateSubmitted, imageData) VALUES (?, ?, ?, 'Pending', NOW(), ?)");
+            $stmt->bind_param('isss', $userId, $title, $description, $imageData);
 
-        if ($stmt->execute()) {
-            $message = "Complaint submitted successfully.";
+            if ($stmt->execute()) {
+                // Set success message
+                $message = "Your complaint has been submitted successfully!";
+            } else {
+                $message = "Failed to submit complaint.";
+            }
+
+            $stmt->close();
         } else {
-            $message = "Failed to submit complaint.";
+            $message = "User ID is missing. Please log in again.";
         }
-
-        $stmt->close();
     } else {
         $message = "Both title and description are required.";
     }
@@ -48,7 +60,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <body>
     <h1>Submit a Complaint</h1>
     <?php if (!empty($message)): ?>
-    <div class="alert"><?= htmlspecialchars($message) ?></div>
+    <div class="alert <?= strpos($message, 'successfully') !== false ? 'success' : 'error' ?>">
+        <?= htmlspecialchars($message) ?>
+    </div>
     <?php endif; ?>
     <form method="POST" enctype="multipart/form-data">
         <label>Title:</label>
@@ -57,8 +71,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <label>Description:</label>
         <textarea name="description" required></textarea>
         <br>
-        <label>Picture (Optional):</label>
-        <input type="file" name="complainPic">
+        <div class="upload-section">
+            <label class="upload-label" for="complainPic">Choose a Picture (Optional)</label>
+            <input type="file" name="complainPic" id="complainPic">
+        </div>
         <br>
         <button type="submit">Submit Complaint</button>
     </form>
