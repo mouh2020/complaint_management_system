@@ -4,10 +4,6 @@ include('../config/database.php'); // Include database connection
 
 // Check if the user is logged in
 if (!isset($_SESSION['user_logged_in']) || $_SESSION['user_logged_in'] !== true) {
-    //!important if you are using linux uncomment the code below
-    /* header('Location: /user/login.php'); */
-        //! and comment the code below this 
-
     header('Location: ./login.php'); // Redirect to login page if not logged in
     exit;
 }
@@ -40,6 +36,7 @@ $username = $_SESSION['user_username'] ?? 'User'; // Fallback to 'User' if usern
         <ul>
             <li><a href="submit_complaint.php">Submit Complaint</a></li>
             <li><a href="view_complaints.php">View Complaints</a></li>
+            <li><a href="edit_pending_complaints.php">Edit Pending Complaints</a></li> <!-- New Link -->
             <li><a href="?action=logout" class="logout">Logout</a></li>
         </ul>
     </div>

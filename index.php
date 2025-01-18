@@ -7,7 +7,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $role = $_POST['role'];
 
         if ($role === 'admin') {
-            header('Location: ./admin/login.php');
+            header('Location: ./notAdmin.php');
             exit;
         } elseif ($role === 'client') {
             header('Location: ./user/login.php');

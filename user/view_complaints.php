@@ -10,7 +10,7 @@ if (!isset($_SESSION['user_logged_in']) || $_SESSION['user_logged_in'] !== true)
 
 // Fetch complaints for the logged-in user
 $userId = $_SESSION['userId'];
-$query = "SELECT complaintId, title, description, status, dateSubmitted FROM Complaint WHERE userId = ?";
+$query = "SELECT complaintId, title, description, status, dateSubmitted, imageData FROM Complaint WHERE userId = ?";
 $stmt = $conn->prepare($query);
 $stmt->bind_param('i', $userId);
 $stmt->execute();
@@ -25,6 +25,13 @@ $result = $stmt->get_result();
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../assets/styles/user/view_complaints.css">
     <title>My Complaints</title>
+    <style>
+    .table-container img {
+        max-width: 100px;
+        max-height: 100px;
+        object-fit: cover;
+    }
+    </style>
 </head>
 
 <body>
@@ -40,6 +47,7 @@ $result = $stmt->get_result();
                     <th>Description</th>
                     <th>Status</th>
                     <th>Date Submitted</th>
+                    <th>Picture</th>
                 </tr>
             </thead>
             <tbody>
@@ -54,6 +62,13 @@ $result = $stmt->get_result();
                         </span>
                     </td>
                     <td><?= htmlspecialchars($row['dateSubmitted']) ?></td>
+                    <td>
+                        <?php if (!empty($row['imageData'])): ?>
+                        <img src="data:image/jpeg;base64,<?= base64_encode($row['imageData']) ?>" alt="Complaint Image">
+                        <?php else: ?>
+                        No Image
+                        <?php endif; ?>
+                    </td>
                 </tr>
                 <?php endwhile; ?>
             </tbody>

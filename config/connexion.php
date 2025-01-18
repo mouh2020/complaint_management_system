@@ -25,24 +25,6 @@ if (mysqli_query($link, $sqlUser)) {
     die("Error creating User table: " . mysqli_error($link));
 }
 
-// Insert data into User table if not exists
-$checkUser = "SELECT COUNT(*) AS count FROM User";
-$resultUser = mysqli_query($link, $checkUser);
-$rowUser = mysqli_fetch_assoc($resultUser);
-if ($rowUser['count'] == 0) {
-    $insertUser = "INSERT INTO User (username, password, email) VALUES
-        ('user1', 'password123', 'user1@example.com'),
-        ('user2', 'password456', 'user2@example.com'),
-        ('test', '$2y$10$8G1SSfEiwVPiZHFWJxRyye4hhj3fX.nk/k6.w/U/L1Cwlf8QkdHAW', 'user3@example.com')";
-    if (mysqli_query($link, $insertUser)) {
-        echo "User data inserted successfully.<br>";
-    } else {
-        die("Error inserting User data: " . mysqli_error($link));
-    }
-} else {
-    echo "User data already exists.<br>";
-}
-
 // Create Admin table
 $sqlAdmin = "CREATE TABLE IF NOT EXISTS Admin (
     adminId INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -55,23 +37,6 @@ if (mysqli_query($link, $sqlAdmin)) {
     die("Error creating Admin table: " . mysqli_error($link));
 }
 
-// Insert data into Admin table if not exists
-$checkAdmin = "SELECT COUNT(*) AS count FROM Admin";
-$resultAdmin = mysqli_query($link, $checkAdmin);
-$rowAdmin = mysqli_fetch_assoc($resultAdmin);
-if ($rowAdmin['count'] == 0) {
-    $insertAdmin = "INSERT INTO Admin (username, password) VALUES
-        ('admin', 'admin'),
-        ('admin2', 'adminsecure')";
-    if (mysqli_query($link, $insertAdmin)) {
-        echo "Admin data inserted successfully.<br>";
-    } else {
-        die("Error inserting Admin data: " . mysqli_error($link));
-    }
-} else {
-    echo "Admin data already exists.<br>";
-}
-
 // Create Complaint table
 $sqlComplaint = "CREATE TABLE IF NOT EXISTS Complaint (
     complaintId INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -81,6 +46,8 @@ $sqlComplaint = "CREATE TABLE IF NOT EXISTS Complaint (
     status VARCHAR(20) NOT NULL DEFAULT 'Pending',
     dateSubmitted DATE NOT NULL,
     resolvedDate DATE DEFAULT NULL,
+    picture VARCHAR(255) DEFAULT NULL,
+    imageData LONGBLOB DEFAULT NULL, -- Added this column
     FOREIGN KEY (userId) REFERENCES User(userId) ON DELETE CASCADE
 )";
 if (mysqli_query($link, $sqlComplaint)) {
@@ -89,22 +56,15 @@ if (mysqli_query($link, $sqlComplaint)) {
     die("Error creating Complaint table: " . mysqli_error($link));
 }
 
-// Insert data into Complaint table if not exists
-$checkComplaint = "SELECT COUNT(*) AS count FROM Complaint";
-$resultComplaint = mysqli_query($link, $checkComplaint);
-$rowComplaint = mysqli_fetch_assoc($resultComplaint);
-if ($rowComplaint['count'] == 0) {
-    $insertComplaint = "INSERT INTO Complaint (userId, title, description, status, dateSubmitted, resolvedDate) VALUES
-        (1, 'Broken AC', 'The AC in the main hall is not working.', 'Resolved', '2025-01-01', '2025-01-16'),
-        (2, 'Noisy Neighbors', 'The neighbors are making too much noise at night.', 'Resolved', '2025-01-05', '2025-01-16'),
-        (1, 'Leaking Roof', 'The roof is leaking during rain.', 'Pending', '2025-01-10', NULL)";
-    if (mysqli_query($link, $insertComplaint)) {
-        echo "Complaint data inserted successfully.<br>";
+// Check if 'imageData' column exists
+$checkColumn = mysqli_query($link, "SHOW COLUMNS FROM Complaint LIKE 'imageData'");
+if (mysqli_num_rows($checkColumn) == 0) {
+    $alterTable = "ALTER TABLE Complaint ADD COLUMN imageData LONGBLOB DEFAULT NULL";
+    if (mysqli_query($link, $alterTable)) {
+        echo "Column 'imageData' added successfully.<br>";
     } else {
-        die("Error inserting Complaint data: " . mysqli_error($link));
+        die("Error adding 'imageData' column: " . mysqli_error($link));
     }
-} else {
-    echo "Complaint data already exists.<br>";
 }
 
 mysqli_close($link);

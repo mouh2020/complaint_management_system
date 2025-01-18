@@ -15,7 +15,8 @@ $query = "
         User.username, 
         Complaint.title, 
         Complaint.description, 
-        Complaint.status 
+        Complaint.status, 
+        Complaint.imageData 
     FROM 
         Complaint
     INNER JOIN 
@@ -39,6 +40,13 @@ if ($conn->error) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../assets/styles/admin/view_all_complaints.css">
     <title>View All Complaints</title>
+    <style>
+    .table-container img {
+        max-width: 100px;
+        max-height: 100px;
+        object-fit: cover;
+    }
+    </style>
 </head>
 
 <body>
@@ -53,6 +61,7 @@ if ($conn->error) {
                     <th>Title</th>
                     <th>Description</th>
                     <th>Status</th>
+                    <th>Picture</th>
                 </tr>
             </thead>
             <tbody>
@@ -72,11 +81,18 @@ if ($conn->error) {
                         <span class="badge"><?= htmlspecialchars($row['status']) ?></span>
                         <?php endif; ?>
                     </td>
+                    <td>
+                        <?php if (!empty($row['imageData'])): ?>
+                        <img src="data:image/jpeg;base64,<?= base64_encode($row['imageData']) ?>" alt="Complaint Image">
+                        <?php else: ?>
+                        No Image
+                        <?php endif; ?>
+                    </td>
                 </tr>
                 <?php endwhile; ?>
                 <?php else: ?>
                 <tr>
-                    <td colspan="5">No complaints found.</td>
+                    <td colspan="6">No complaints found.</td>
                 </tr>
                 <?php endif; ?>
             </tbody>

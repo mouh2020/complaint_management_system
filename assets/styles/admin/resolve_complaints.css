@@ -1,5 +1,4 @@
-
-/* General styles */
+/* General styling for body */
 body {
     font-family: Arial, sans-serif;
     background: linear-gradient(135deg, #6a11cb, #2575fc);
@@ -12,16 +11,13 @@ body {
     color: #fff;
 }
 
+/* Title and heading styling */
 h1, h2 {
     margin: 20px 0;
     text-align: center;
 }
 
-p {
-    text-align: center;
-}
-
-/* Notification box styles */
+/* Alert box styling */
 .alert-box {
     margin: 20px auto;
     padding: 15px 20px;
@@ -39,7 +35,7 @@ p {
     background-color: #f44336; /* Red for error */
 }
 
-/* Table styles */
+/* Table styling */
 table {
     width: 90%;
     max-width: 800px;
@@ -72,21 +68,49 @@ tr:last-child td {
     border-bottom: none;
 }
 
-/* Action buttons */
+/* Action buttons container */
+.action-buttons {
+    display: flex;
+    gap: 15px; /* Space between buttons */
+    align-items: center; /* Align vertically */
+}
+
+/* General button styling */
 button {
-    padding: 10px 15px;
+    padding: 10px 20px;
+    font-size: 16px;
     border: none;
-    background: #4caf50;
-    color: #fff;
-    font-size: 14px;
-    font-weight: bold;
-    border-radius: 5px;
+    border-radius: 8px;
     cursor: pointer;
-    transition: background 0.3s ease-in-out;
+    transition: all 0.3s ease-in-out;
+    font-weight: bold;
+    text-align: center;
+    display: inline-block;
 }
 
 button:hover {
-    background: #45a049;
+    transform: translateY(-3px); /* Hover effect */
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* Resolve button styling */
+button.resolve-btn {
+    background-color: #4caf50; /* Green for resolve */
+    color: #fff;
+}
+
+button.resolve-btn:hover {
+    background-color: #45a049; /* Darker green on hover */
+}
+
+/* Delete button styling */
+button.delete-btn {
+    background-color: #f44336; /* Red for delete */
+    color: #fff;
+}
+
+button.delete-btn:hover {
+    background-color: #e53935; /* Darker red on hover */
 }
 
 /* Link styles */
