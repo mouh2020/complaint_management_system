@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Jan 16, 2025 at 10:34 PM
+-- Generation Time: Jan 19, 2025 at 08:29 AM
 -- Server version: 8.0.40-0ubuntu0.24.04.1
 -- PHP Version: 8.3.6
 
@@ -18,7 +18,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `ComplaintsSystem`
+-- Database: `complaints_db`
 --
 
 -- --------------------------------------------------------
@@ -29,17 +29,18 @@ SET time_zone = "+00:00";
 
 CREATE TABLE `Admin` (
   `adminId` int NOT NULL,
-  `username` varchar(50) NOT NULL,
-  `password` varchar(100) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  `username` varchar(255) NOT NULL,
+  `password` varchar(255) NOT NULL,
+  `email` varchar(255) NOT NULL
+) /* ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci; */
 
 --
 -- Dumping data for table `Admin`
 --
 
-INSERT INTO `Admin` (`adminId`, `username`, `password`) VALUES
-(1, 'admin', 'admin'),
-(2, 'admin2', 'adminsecure');
+INSERT INTO `Admin` (`adminId`, `username`, `password`, `email`) VALUES
+(1, 'admin1', 'pass1', 'admin1@example.com'),
+(2, 'admin2', 'pass2', 'admin2@example.com');
 
 -- --------------------------------------------------------
 
@@ -50,12 +51,12 @@ INSERT INTO `Admin` (`adminId`, `username`, `password`) VALUES
 CREATE TABLE `Complaint` (
   `complaintId` int NOT NULL,
   `userId` int NOT NULL,
-  `title` varchar(100) NOT NULL,
+  `title` varchar(255) NOT NULL,
   `description` text NOT NULL,
   `status` varchar(20) NOT NULL DEFAULT 'Pending',
   `dateSubmitted` date NOT NULL,
   `resolvedDate` date DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) /* ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci; */
 
 --
 -- Dumping data for table `Complaint`
@@ -67,14 +68,15 @@ INSERT INTO `Complaint` (`complaintId`, `userId`, `title`, `description`, `statu
 (3, 1, 'Leaking Roof', 'The roof is leaking during rain.', 'Resolved', '2025-01-10', '2025-01-16'),
 (4, 6, 'Network Issue', 'Internet is not working in Room 101', 'Resolved', '2025-01-16', '2025-01-16'),
 (5, 6, 'Leaking Tap', 'The tap in the kitchen is leaking', 'Resolved', '2025-01-16', '2025-01-16'),
-(6, 6, 'Power Outage', 'Power outage in Building B', 'Pending', '2025-01-16', NULL),
+(6, 6, 'Power Outage', 'Power outage in Building B', 'Resolved', '2025-01-16', '2025-01-19'),
 (7, 6, 'Broken Chair', 'The chair in my office is broken', 'Pending', '2025-01-16', NULL),
 (8, 6, 'AC Not Working', 'The air conditioner is not cooling properly', 'Resolved', '2025-01-16', '2025-01-16'),
 (9, 6, 'first complaint', 'Yes my first complaint', 'Resolved', '2025-01-16', '2025-01-16'),
 (10, 6, 'first complaint', 'Yes my first complaint', 'Resolved', '2025-01-16', '2025-01-16'),
 (11, 6, 'hi there', 'Wow description', 'Pending', '2025-01-16', NULL),
-(12, 6, 'The second complaint', 'Hi there', 'Pending', '2025-01-16', NULL),
-(13, 6, 'The second complaint', 'Hi there', 'Resolved', '2025-01-16', '2025-01-16');
+(12, 6, 'The second complaint', 'Hi there', 'Resolved', '2025-01-16', '2025-01-18'),
+(13, 6, 'The second complaint', 'Hi there', 'Resolved', '2025-01-16', '2025-01-16'),
+(14, 6, 'Test', 'Test', 'Resolved', '2025-01-19', '2025-01-19');
 
 -- --------------------------------------------------------
 
@@ -84,24 +86,25 @@ INSERT INTO `Complaint` (`complaintId`, `userId`, `title`, `description`, `statu
 
 CREATE TABLE `User` (
   `userId` int NOT NULL,
-  `username` varchar(50) NOT NULL,
-  `password` varchar(100) NOT NULL,
+  `username` varchar(255) NOT NULL,
+  `password` varchar(255) NOT NULL,
   `email` varchar(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) /* ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci; */
 
 --
 -- Dumping data for table `User`
 --
 
 INSERT INTO `User` (`userId`, `username`, `password`, `email`) VALUES
-(1, 'user1', 'password123', 'user1@example.com'),
-(2, 'user2', 'password456', 'user2@example.com'),
-(3, 'test', '$2y$10$8G1SSfEiwVPiZHFWJxRyye4hhj3fX.nk/k6.w/U/L1Cwlf8QkdHAW', 'user3@example.com'),
-(4, 'user', '$2y$10$i6nlwPsL72QefC1zgjFrkOuNu7J9W/Kcz37YzYDD1UJLEEt7EG94q', 'user4@example.com'),
-(5, 'sa', '$2y$10$aiO9UKMg.NPFzh5c1XzXYOnsjG9OMGAi5W/ibKRUldUGZlwiN6v9u', 'user5@example.com'),
-(6, 'med', '$2y$10$x5yVFkT8lRbmtkQxMkHwR.STHeOe3yE5TXyOvwemTlPm5iBMGQH4K', 'user6@example.com'),
-(7, 'medmed', '$2y$10$EFdXI1zbCxX/H4IUZHoAtOinecgkSf0WY0uzM/7m1wEqxQQxkY/K6', 'user7@example.com'),
-(8, 'testgmail', '$2y$10$njW/BaWKeVVhd.BsNxq4kOlgOq.t4AlIR8haHJX1idGoYs12iQu9y', 'test@gmail.com');
+(1, 'user1', 'pass1', 'user1@example.com'),
+(2, 'user2', 'pass2', 'user2@example.com'),
+(3, 'user3', 'pass3', 'user3@example.com'),
+(4, 'user', '123456', 'user4@example.com'),
+(5, 'sa', '123456', 'user5@example.com'),
+(6, 'med', '123456', 'user6@example.com'),
+(7, 'medmed', '123456', 'user7@example.com'),
+(8, 'testgmail', '123456', 'test@gmail.com'),
+(9, '2025', '2025', 't2025@gmail.com');
 
 --
 -- Indexes for dumped tables
@@ -124,8 +127,7 @@ ALTER TABLE `Complaint`
 -- Indexes for table `User`
 --
 ALTER TABLE `User`
-  ADD PRIMARY KEY (`userId`),
-  ADD UNIQUE KEY `email` (`email`);
+  ADD PRIMARY KEY (`userId`);
 
 --
 -- AUTO_INCREMENT for dumped tables
@@ -141,13 +143,13 @@ ALTER TABLE `Admin`
 -- AUTO_INCREMENT for table `Complaint`
 --
 ALTER TABLE `Complaint`
-  MODIFY `complaintId` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `complaintId` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- AUTO_INCREMENT for table `User`
 --
 ALTER TABLE `User`
-  MODIFY `userId` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `userId` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- Constraints for dumped tables

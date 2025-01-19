@@ -1,46 +1,32 @@
 <?php
 session_start();
-include('../config/database.php');
+include('../config/database.php'); // Include the database connection
 
+// Check if the user is logged in
 if (!isset($_SESSION['user_logged_in']) || $_SESSION['user_logged_in'] !== true) {
-    header('Location: ./login.php');
+    header('Location: ./login.php'); // Redirect to login page if not logged in
     exit;
 }
 
-$message = '';
+$message = ''; // Message to display feedback to the user
 
+// Handle the form submission
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $title = trim($_POST['title'] ?? '');
     $description = trim($_POST['description'] ?? '');
-    $imageData = null;
-
-    if (isset($_FILES['complainPic']) && $_FILES['complainPic']['error'] === UPLOAD_ERR_OK) {
-        $imageInfo = getimagesize($_FILES['complainPic']['tmp_name']);
-        if ($imageInfo !== false) {
-            $imageData = file_get_contents($_FILES['complainPic']['tmp_name']);
-        } else {
-            $message = "Invalid image file.";
-        }
-    }
 
     if (!empty($title) && !empty($description)) {
-        // Ensure userId is set in the session
-        if (isset($_SESSION['userId'])) {
-            $userId = $_SESSION['userId'];
-            $stmt = $conn->prepare("INSERT INTO Complaint (userId, title, description, status, dateSubmitted, imageData) VALUES (?, ?, ?, 'Pending', NOW(), ?)");
-            $stmt->bind_param('isss', $userId, $title, $description, $imageData);
+        // Insert the complaint into the database
+        $stmt = $conn->prepare("INSERT INTO Complaint (title, description, status, dateSubmitted, userId) VALUES (?, ?, 'Pending', NOW(), ?)");
+        $stmt->bind_param('ssi', $title, $description, $_SESSION['userId']);
 
-            if ($stmt->execute()) {
-                // Set success message
-                $message = "Your complaint has been submitted successfully!";
-            } else {
-                $message = "Failed to submit complaint.";
-            }
-
-            $stmt->close();
+        if ($stmt->execute()) {
+            $message = "Complaint submitted successfully.";
         } else {
-            $message = "User ID is missing. Please log in again.";
+            $message = "Failed to submit complaint. Please try again.";
         }
+
+        $stmt->close();
     } else {
         $message = "Both title and description are required.";
     }
@@ -54,31 +40,34 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../assets/styles/user/submit_complaint.css">
+
     <title>Submit Complaint</title>
+    <style></style>
 </head>
 
 <body>
     <h1>Submit a Complaint</h1>
+
+    <!-- Display feedback message -->
     <?php if (!empty($message)): ?>
-    <div class="alert <?= strpos($message, 'successfully') !== false ? 'success' : 'error' ?>">
+    <div class="alert <?= strpos(htmlspecialchars($message), 'successfully') !== false ? '' : 'error' ?>">
         <?= htmlspecialchars($message) ?>
     </div>
     <?php endif; ?>
-    <form method="POST" enctype="multipart/form-data">
-        <label>Title:</label>
-        <input type="text" name="title" required>
-        <br>
-        <label>Description:</label>
-        <textarea name="description" required></textarea>
-        <br>
-        <div class="upload-section">
-            <label class="upload-label" for="complainPic">Choose a Picture (Optional)</label>
-            <input type="file" name="complainPic" id="complainPic">
-        </div>
-        <br>
-        <button type="submit">Submit Complaint</button>
+
+    <!-- Complaint Submission Form -->
+    <form method="POST">
+        <label for="title">Title:</label>
+        <input type="text" id="title" name="title" placeholder="Enter the title" required aria-label="Complaint Title">
+
+        <label for="description">Description:</label>
+        <textarea id="description" name="description" placeholder="Enter the description" required
+            aria-label="Complaint Description"></textarea>
+
+        <button type="submit" aria-label="Submit Complaint">Submit Complaint</button>
     </form>
-    <p><a href="dashboard.php">Back to Dashboard</a></p>
+
+    <p><a href="dashboard.php" aria-label="Back to Dashboard">Back to Dashboard</a></p>
 </body>
 
 </html>

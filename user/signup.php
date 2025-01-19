@@ -1,8 +1,12 @@
 <?php
+include('../config/database.php'); // Include the database connection
 session_start();
-include('../config/database.php');
 
 $error_message = '';
+if (isset($_SESSION['user_logged_in']) && $_SESSION['user_logged_in'] === true) {
+    header('Location: ./dashboard.php');
+    exit;
+}
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Sanitize user input
@@ -26,16 +30,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $error_message = 'Email already exists. Please try a different email address.';
             }
         } else {
-            // Hash the password for security
-            $hashed_password = password_hash($password, PASSWORD_BCRYPT);
-
             // Insert the new user into the database
             $stmt = $conn->prepare("INSERT INTO User (username, email, password) VALUES (?, ?, ?)");
-            $stmt->bind_param('sss', $username, $email, $hashed_password);
+            $stmt->bind_param('sss', $username, $email, $password);
 
             if ($stmt->execute()) {
-                // Redirect to login page after successful signup
-                header("Location: ./login.php");
+                // Redirect to dashboard.php upon successful signup
+                $_SESSION['user_logged_in'] = true;
+                $_SESSION['user_username'] = $username;
+                header("Location: ./dashboard.php");
                 exit();
             } else {
                 $error_message = 'Error occurred during registration. Please try again.';
@@ -50,6 +53,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">

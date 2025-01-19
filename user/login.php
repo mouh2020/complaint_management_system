@@ -1,26 +1,41 @@
 <?php
 session_start();
-include('../config/database.php');
+include('../config/database.php'); // Include database connection file
 
 $error_message = '';
 
+// Check if the user is already logged in
+if (isset($_SESSION['user_logged_in']) && $_SESSION['user_logged_in'] === true) {
+    header('Location: ./dashboard.php');
+    exit;
+}
+
+// Handle form submission
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // Get submitted username and password
     $username = trim($_POST['username'] ?? '');
     $password = trim($_POST['password'] ?? '');
 
     if (!empty($username) && !empty($password)) {
+        // Prepare a SQL query to fetch user details
         $stmt = $conn->prepare("SELECT * FROM User WHERE username = ?");
         $stmt->bind_param('s', $username);
         $stmt->execute();
         $result = $stmt->get_result();
 
+        // Check if a matching record is found
         if ($result->num_rows > 0) {
             $user = $result->fetch_assoc();
-            if (password_verify($password, $user['password'])) {
-                // Set session variables
+
+            // Check password
+            if ($password == $user['password'] ){
                 $_SESSION['user_logged_in'] = true;
-                $_SESSION['userId'] = $user['userId']; // Ensure this is set
+
+                // Store user details in the session
+                $_SESSION['userId'] = $user['userId'];
                 $_SESSION['user_username'] = $user['username'];
+
+                // Redirect to the user dashboard
                 header('Location: ./dashboard.php');
                 exit;
             } else {
@@ -29,11 +44,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         } else {
             $error_message = 'Invalid username or password.';
         }
+
+        $stmt->close();
     } else {
         $error_message = 'Both username and password are required.';
     }
 }
 ?>
+
+
+
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -48,16 +69,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <body>
     <div class="login-card">
         <h1>User Login</h1>
+
         <?php if (!empty($error_message)): ?>
         <div class="error-message"><?= htmlspecialchars($error_message) ?></div>
         <?php endif; ?>
+
         <form method="POST">
             <label for="username">Username</label>
-            <input type="text" id="username" name="username" required>
+            <input type="text" id="username" name="username" placeholder="Enter your username" required>
+
             <label for="password">Password</label>
-            <input type="password" id="password" name="password" required>
+            <input type="password" id="password" name="password" placeholder="Enter your password" required>
+
             <button type="submit">Login</button>
         </form>
+
         <div class="signup-link">
             Don't have an account? <a href="signup.php">Sign up here</a>.
         </div>
